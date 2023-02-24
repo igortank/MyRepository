@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 import os
-import sys
 
-os.system("echo Hello my script!")
-os.system("ls")
+os.system('git add --all')
+os.system('git commit -m "Auto commit!"')
 
-for n in range(int(sys.argv[1]), int(sys.argv[2])):
-    if n % 3 == 0 and n % 5 == 0:
-        print("fizzbuzz")
-    elif n % 3 == 0:
-        print("fizz")
-    elif n % 5 == 0:
-        print("buzz")
-    else:
-        print(n)
+listRepos = os.popen('git remote show').read().split()
+
+print(f'Push repositories: {listRepos}')
+
+for repo in listRepos:
+	os.system(f'git push {repo} --all')

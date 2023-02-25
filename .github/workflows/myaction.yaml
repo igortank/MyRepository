@@ -18,11 +18,11 @@ jobs:
           echo "List tabs:" > result.log
           count=0
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            #tmp=$(findtabs $file)
-            echo "$file was changed and has tmp tabs!" >> result.log
-            #count=$(($count + $tmp))
+            tmp=$(findtabs $file)
+            echo "$file was changed and has $tmp tabs!" >> result.log
+            count=$(($count + $tmp))
           done
-          #echo "Total $count tabs!" >> result.log
+          echo "Total $count tabs!" >> result.log
       - name: Upload report
         uses: actions/upload-artifact@v2
         with:

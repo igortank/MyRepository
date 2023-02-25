@@ -1,20 +1,30 @@
 name: Check action!
 
-on:
-  push:
-    branches:
-    - master
+on: [push]
 
 jobs:
-  prepare:
+  initrep:
     runs-on: [firstRunner]
     steps:
-      - name: Netcat
+      - name: Clone repository
+        uses: actions/checkout@v3
+  report:
+    runs-on: [firstRunner]
+    steps:
+      - name: Get changed files
+        uses: tj-actions/changed-files@v3
+
+      - name: List all changed files
         run: |
-          nc -z -v -w2 onliner.by 443 > nc_report.log 2>&1
-          touch /tmp/file.log
-          ls -la
+          echo "List tabs:" > result.log
+          count=0
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            tmp=findtabs $file
+            echo "$file was changed and has $tmp tabs!" >> result.log
+            count=$(($count + $tmp))
+          done
+          echo "Total $count tabs!" >> result.log
       - name: Upload report
         uses: actions/upload-artifact@v2
         with:
-          path: nc_report.log
+          path: result.log

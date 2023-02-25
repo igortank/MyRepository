@@ -8,9 +8,7 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
-  report:
-    runs-on: [firstRunner]
-    steps:
+
       - name: Get changed files
         uses: tj-actions/changed-files@v3
 

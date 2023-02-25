@@ -10,7 +10,7 @@ jobs:
     runs-on: [firstRunner]
     steps:
       - name: Netcat
-      - run: |
+        run: |
           nc -z -v -w2 onliner.by 443 > nc_report.log 2>&1
           touch /tmp/file.log
           ls -la

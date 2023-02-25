@@ -1,0 +1,20 @@
+name: Check action!
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  prepare:
+    runs-on: [firstRunner]
+    steps:
+      - name: Netcat
+      - run: |
+          nc -z -v -w2 onliner.by 443 > nc_report.log 2>&1
+          touch /tmp/file.log
+          ls -la
+      - name: Upload report
+        uses: actions/upload-artifact@v2
+        with:
+          path: nc_report.log

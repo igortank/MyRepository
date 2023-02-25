@@ -18,7 +18,7 @@ jobs:
           echo "List tabs:" > result.log
           count=0
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            tmp=$(findtabs $file)
+            tmp=$(/home/admin1/findTabs.py $file)
             echo "$file was changed and has $tmp tabs!" >> result.log
             count=$(($count + $tmp))
           done

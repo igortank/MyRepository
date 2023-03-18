@@ -24,7 +24,7 @@ jobs:
           echo "$(kubectl version --short)" >> kind.log
           echo "Node count: $(kubectl get nodes | grep -c 'Ready')" >> kind.log
           difference=$(( ${{ steps.stop.outputs.END_TIME }} - ${{ steps.start.outputs.START_TIME }} ))
-          echo "Deployed $difference seconds" >> kind.log
+          echo "Deployed $($difference) seconds" >> kind.log
 
       - name: Upload report
         uses: actions/upload-artifact@v2
@@ -52,7 +52,7 @@ jobs:
           echo "$(kubectl version --short)" >> minikube.log
           echo "Node count: $(kubectl get nodes | grep -c 'Ready')" >> minikube.log
           difference=$(( ${{ steps.stop.outputs.END_TIME }} - ${{ steps.start.outputs.START_TIME }} ))
-          echo "Deployed $difference seconds" >> minikube.log
+          echo "Deployed $($difference) seconds" >> minikube.log
 
       - name: Upload report
         uses: actions/upload-artifact@v2

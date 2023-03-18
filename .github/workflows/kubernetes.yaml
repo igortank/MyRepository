@@ -1,0 +1,58 @@
+name: Check action!
+
+on: workflow_dispatch
+
+jobs:
+  deploy_kind:
+    runs-on: ubuntu-latest
+    name: Deploy KinD
+    steps:
+      - name: Start
+        id: start
+        run: echo "START_TIME=$(START_TIME '+%s')" >> $GITHUB_OUTPUT
+
+      - name: Deploy KinD 
+        uses: helm/kind-action@v1.4.0
+
+      - name: Stop
+        id: stop
+        run: echo "END_TIME=$(END_TIME '+%s')" >> $GITHUB_OUTPUT
+
+      - name: Result
+        run: |           
+          echo "Version: \n$(kubectl version --short)" >> kind.log
+          echo "Node count: $(kubectl get nodes | grep -c 'Ready')" >> kind.log
+          difference=$(( ${{ steps.start.outputs.START_TIME }} - ${{ steps.start.outputs.END_TIME }} ))
+          echo "Deployed $difference seconds" >> kind.log
+
+      - name: Upload report
+        uses: actions/upload-artifact@v2
+        with:
+          path: kind.log
+  
+  deploy_mnikube:
+    runs-on: ubuntu-latest
+    name: Deploy minikube
+    steps:
+      - name: Start
+        id: start
+        run: echo "START_TIME=$(START_TIME '+%s')" >> $GITHUB_OUTPUT
+
+      - name: Deploy minikube
+        uses: medyagh/setup-minikube@master
+
+      - name: Stop
+        id: stop
+        run: echo "END_TIME=$(END_TIME '+%s')" >> $GITHUB_OUTPUT
+
+      - name: Result
+        run: |           
+          echo "Version: \n$(kubectl version --short)" >> minikube.log
+          echo "Node count: $(kubectl get nodes | grep -c 'Ready')" >> minikube.log
+          difference=$(( ${{ steps.start.outputs.START_TIME }} - ${{ steps.start.outputs.END_TIME }} ))
+          echo "Deployed $difference seconds" >> minikube.log
+
+      - name: Upload report
+        uses: actions/upload-artifact@v2
+        with:
+          path: minikube.log

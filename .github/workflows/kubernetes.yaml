@@ -20,9 +20,10 @@ jobs:
 
       - name: Result
         run: |           
-          echo "Version: \n$(kubectl version --short)" >> kind.log
+          echo "Version:" >> kind.log
+          echo "$(kubectl version --short)" >> kind.log
           echo "Node count: $(kubectl get nodes | grep -c 'Ready')" >> kind.log
-          difference=$(( ${{ steps.start.outputs.START_TIME }} - ${{ steps.start.outputs.END_TIME }} ))
+          difference=$(( ${{ steps.stop.outputs.END_TIME }} - ${{ steps.start.outputs.START_TIME }} ))
           echo "Deployed $difference seconds" >> kind.log
 
       - name: Upload report
@@ -47,9 +48,10 @@ jobs:
 
       - name: Result
         run: |           
-          echo "Version: \n$(kubectl version --short)" >> minikube.log
+          echo "Version:" >> minikube.log
+          echo "$(kubectl version --short)" >> minikube.log
           echo "Node count: $(kubectl get nodes | grep -c 'Ready')" >> minikube.log
-          difference=$(( ${{ steps.start.outputs.START_TIME }} - ${{ steps.start.outputs.END_TIME }} ))
+          difference=$(( ${{ steps.stop.outputs.END_TIME }} - ${{ steps.start.outputs.START_TIME }} ))
           echo "Deployed $difference seconds" >> minikube.log
 
       - name: Upload report

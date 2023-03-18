@@ -1,6 +1,6 @@
 name: Check action!
 
-on: [push]
+on: workflow_dispatch
 
 jobs:
   initrep:

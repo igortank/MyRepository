@@ -1,4 +1,4 @@
-name: Check action!
+name: Kubernetes action!
 
 on: workflow_dispatch
 

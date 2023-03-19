@@ -11,7 +11,8 @@ jobs:
         mkdir ~/.ssh
         eval `ssh-agent -s`
         sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass -p ${{ secrets.JUMP_PASSWORD }} \
-        ssh -W %h%p ${{ secrets.JUMP_USERNAME }}@${{ secrets.JUMP_HOST }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
+        ssh -W %h%p ${{ secrets.JUMP_USERNAME }}@${{ secrets.JUMP_HOST }}" \
+        ${{ secrets.USERNAME }}@${{ secrets.HOST }} \
         kubectl get pods -A >> ${{ env.report-file }}
 
     - name: check-crashed-pods

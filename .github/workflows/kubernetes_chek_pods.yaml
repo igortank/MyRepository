@@ -28,8 +28,7 @@ jobs:
         proxy_username: ${{ secrets.JUMP_USERNAME }}
         proxy_password: ${{ secrets.JUMP_PASSWORD }}
         source: ${{ env.report-file }}
-        target: ${{ env.report-file }}
-
+        
     - name: check-crashed-pods
       id: check-pods
       run: |

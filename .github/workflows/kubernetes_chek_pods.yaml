@@ -22,23 +22,23 @@ jobs:
     - name: check-crashed-pods
       id: check-pods
       run: |
-        echo "pods_failed_string=$(cat ${{ env.report-file }} | grep -v Running)" >> $GITHUB_OUTPUT
-        echo "pods_failed_count=$(cat ${{ env.report-file }} | grep -v Running | wc -l)" >> $GITHUB_OUTPUT
+        echo "pods-failed-string=$(cat ${{ env.report-file }} | grep -v Running)" >> $GITHUB_OUTPUT
+        echo "pods-failed-count=$(cat ${{ env.report-file }} | grep -v Running | wc -l)" >> $GITHUB_OUTPUT
 
     - name: upload crashed pod's list
-      if: steps.check-pods.outputs.pods_failed_count > 1
+      if: steps.check-pods.outputs.pods-failed-count > 1
       uses: actions/upload-artifact@v3
       with:
         path: ${{ env.report-file }}
 
     - name: Slack notification
       uses: rtCamp/action-slack-notify@v2
-      if: steps.check-pods.outputs.pods_failed_count > 1
+      if: steps.check-pods.outputs.pods-failed-count > 1
       env:
         SLACK_CHANNEL: notification_github
         SLACK_COLOR: '#FF0000'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
         SLACK_TITLE: 'Some pods have crashed:'
-        SLACK_MESSAGE: ${{ steps.check-pods.outputs.pods_failed_string }}
+        SLACK_MESSAGE: ${{ steps.check-pods.outputs.pods-failed-string }}
         SLACK_USERNAME: rtCamp
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

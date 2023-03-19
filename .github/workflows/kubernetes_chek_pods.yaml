@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       report-file: report.log
+      report-text:
     steps:
     - name: Connect to k3s host
       run: |
@@ -23,12 +24,6 @@ jobs:
       id: check-pods
       run: |
         echo "pods-failed-count=$(cat ${{ env.report-file }} | grep -v Running | wc -l)" >> $GITHUB_OUTPUT
-
-    - name: crashed-pod-string
-      if: steps.check-pods.outputs.pods-failed-count > 1
-      id: pods-str
-      run: |
-        echo "pods-failed-string=$(cat ${{ env.report-file }} | grep -v Running)" >> $GITHUB_OUTPUT
 
     - name: upload crashed pod's list
       if: steps.check-pods.outputs.pods-failed-count > 1

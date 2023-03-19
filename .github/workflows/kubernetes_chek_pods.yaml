@@ -1,0 +1,43 @@
+name: Check pods kubectl
+on: workflow_dispatch
+jobs:
+  build:
+    name: Check pods kubectl
+    runs-on: ubuntu-latest
+    env:
+      report-file: report.log
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        proxy_host: ${{ secrets.JUMP_HOST }}
+        proxy_username: ${{ secrets.JUMP_USERNAME }}
+        proxy_password: ${{ secrets.JUMP_PASSWORD }}
+        script: kubectl get pods -A >> ${{env.report-file}}
+
+    - name: check-crashed-pods
+      id: check-pods
+      run: |
+        echo "pods_failed_string=$(cat  ${{env.report-file}} | grep -v Running)" >> $GITHUB_OUTPUT
+        echo "pods_failed_count=$(cat ${{env.report-file}} | grep -v Running | wc -l)" >> $GITHUB_OUTPUT
+
+    - name: upload crashed pod's list
+      if: steps.check-pods.outputs.pods_failed_count > 1
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{ env.report-file }}
+
+    - name: Slack notification
+      uses: rtCamp/action-slack-notify@v2
+      if: steps.check-pods.outputs.pods_failed_count > 1
+      env:
+        SLACK_CHANNEL: notification_github
+        SLACK_COLOR: '#FF0000'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_TITLE: 'Some pods have crashed:'
+        SLACK_MESSAGE: ${{ steps.check-pods.outputs.pods_failed_string }}
+        SLACK_USERNAME: rtCamp
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

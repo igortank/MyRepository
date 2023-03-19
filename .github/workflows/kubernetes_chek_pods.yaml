@@ -38,7 +38,6 @@ jobs:
         SLACK_CHANNEL: notification_github
         SLACK_COLOR: '#FF0000'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_TITLE: 'Some pods have crashed:'
-        SLACK_MESSAGE: ${{ steps.pods-str.outputs.pods-failed-string }}
+        SLACK_TITLE: 'Some pods have crashed!'
         SLACK_USERNAME: rtCamp
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

@@ -1,5 +1,7 @@
 name: Check pods kubectl
+
 on: workflow_dispatch
+
 jobs:
   build:
     name: Check pods kubectl
@@ -7,7 +9,8 @@ jobs:
     env:
       report-file: report.log
     steps:
-    run: |
+    - name: Connect to k3s host
+      run: |
         mkdir ~/.ssh
         eval `ssh-agent -s`
         sshpass -p ${{ secrets.PASSWORD }} ssh -oProxyCommand="sshpass -p ${{ secrets.JUMP_PASSWORD }} \

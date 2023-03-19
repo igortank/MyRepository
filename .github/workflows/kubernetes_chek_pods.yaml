@@ -22,7 +22,6 @@ jobs:
     - name: check-crashed-pods
       id: check-pods
       run: |
-        echo "pods-failed-string=$(cat ${{ env.report-file }} | grep -v Running)" >> $GITHUB_OUTPUT
         echo "pods-failed-count=$(cat ${{ env.report-file }} | grep -v Running | wc -l)" >> $GITHUB_OUTPUT
 
     - name: upload crashed pod's list
@@ -39,6 +38,6 @@ jobs:
         SLACK_COLOR: '#FF0000'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
         SLACK_TITLE: 'Some pods have crashed:'
-        SLACK_MESSAGE: ${{ steps.check-pods.outputs.pods-failed-string }}
+        #SLACK_MESSAGE: ${{ steps.check-pods.outputs.pods-failed-string }}
         SLACK_USERNAME: rtCamp
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
